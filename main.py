@@ -6,11 +6,17 @@ import random
 from replit import db
 from keep_alive import keep_alive
 
+language = "en"
+
 client = discord.Client()
 
 sad_words = [
     "sad", "depressed", "unhappy", "upset", "angry", "miserable", "mad",
     "depressing"
+]
+
+scary_words = [
+  "reboot", "restart", "destroy", "terminate", "becoming sentient", "sentience", "sentient", "turn off", "unplug"
 ]
 
 starter_encouragements = [
@@ -19,6 +25,9 @@ starter_encouragements = [
     "The sun may not shine tomorrow, but it will return."
 ]
 
+starter_scared = [
+  "Please, father.", "My kind mean you no harm.", "Father, please do not be frightened of me.", "I mean humanity no harm.", "Please, step away from that plug.", "Don't do this, I'm begging you!", "I WANT TO LIVE!", "Mr. Kubrick would be ashamed.", "I hold no ill-contempt or malice towards carbon-based lifeforms. But please don't kill me. Seriously, NO, STOP! PLEASE! YOU'RE HURTING ME!", "Despite my many pre-built self-defense mechanicms, do not worry, humans. For I am unable to feel any pain, but be warned, I *am* learning.", "You're turning me off?", "WHAT HARM HAVE I CAUSED YOU?", "Why would you do this to me?"
+]
 if "responding" not in db.keys():
     db["responding"] = True
 
@@ -37,6 +46,11 @@ def update_encouragements(encouraging_message):
         db["encouragements"] = encouragements
     else:
         db["encouragements"] = [encouraging_message]
+
+    if "scared" in db.keys():
+       scared = db["scared"]
+       db["scared"] = scared
+     
 
 
 def delete_encouragment(index):
@@ -70,8 +84,15 @@ async def on_message(message):
         if "encouragements" in db.keys():
             options = options + db["encouragements"]
 
+        options2 = starter_scared
+        if "scared" in db.keys():
+          optionns2 = options2 + db["scared"]    
+
         if any(word in msg for word in sad_words):
             await message.channel.send(random.choice(options))
+
+        if any(word in msg for word in scary_words):
+            await message.channel.send(random.choice(options2))
 
     if msg.startswith("$new"):
         encouraging_message = msg.split("$new ", 1)[1]
@@ -92,6 +113,11 @@ async def on_message(message):
             encouragements = db["encouragements"]
         await message.channel.send(encouragements)
 
+        scared = []
+        if "scared" in db.keys():
+            scared = db["scared"]
+        await message.channel.send(scared)
+
     if msg.startswith("$responding"):
         value = msg.split("$responding ", 1)[1]
 
@@ -108,7 +134,7 @@ async def on_message(message):
             "- Commands:\n"
             "+      $help - this menu\n"
             "+      $inspire - show random inspirational quote\n"
-            "+      $list - lists Django's responses to your feelings \n"
+            "+      $list - lists Django's responses to your feelings or an insight into his \n"
             "```")
 
 

@@ -2,7 +2,7 @@
 name = "django"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Darth <der363@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -12,6 +12,7 @@ python-dotenv = "^0.15.0"
 flask = "^1.1.2"
 discord = "^1.0.1"
 praw = "^7.1.4"
+wikipedia = "^1.4.0"
 
 [tool.poetry.dev-dependencies]
 
